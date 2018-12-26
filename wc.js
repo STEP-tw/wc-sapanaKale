@@ -29,3 +29,13 @@
   node ./wc.js -c -w -l file1 [file2]...
   node ./wc.js -c -l -w file1 [file2]...
 */
+
+const { countLinesWordsBytes, formatOutput } = require("./src/lib/lwcCounter");
+const fs = require('fs');
+
+const main = function() {
+  let countDetails = countLinesWordsBytes(process.argv[2], fs);
+  return formatOutput(countDetails);
+};
+
+console.log(main());

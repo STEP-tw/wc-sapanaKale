@@ -1,0 +1,28 @@
+{
+  "name": "wc-sapanakale",
+  "version": "0.0.1",
+  "description": "",
+  "main": "wc.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha --recursive",
+    "start": "node wc.js wc.js",
+    "prettify": "prettier --write **/**/*.js *.js"
+  },
+
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/STEP-tw/wc-sapanaKale.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/STEP-tw/wc-sapanaKale/issues"
+  },
+  "homepage": "https://github.com/STEP-tw/wc-sapanaKale#readme",
+  "devDependencies": {
+    "mocha": "^5.2.0"
+  }
+}
