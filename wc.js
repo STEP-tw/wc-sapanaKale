@@ -31,7 +31,7 @@
 */
 
 const { countLinesWordsBytes, formatOutput } = require("./src/lib/lwcCounter");
-const fs = require('fs');
+const fs = require("fs");
 
 const main = function() {
   let countDetails = countLinesWordsBytes(process.argv[2], fs);
