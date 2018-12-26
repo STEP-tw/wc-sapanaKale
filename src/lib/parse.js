@@ -1,73 +1,62 @@
-const ValidOptions = ["l", "w", "c"];
+const { findFirstIndexOf, extractSet } = require("../util/array");
 
-const defaultOptions = ["default", "-lwc", "-lcw", "-wlc", "-wcl", "-cwl", "-clw"];
+const validOptions = ["default", "l", "w", "c"];
 
-const optionValue = { l: "line", w: "word", c: "byte" };
+const defaultOptions = ["lwc", "lcw", "wlc", "wcl", "cwl", "clw"];
 
-const isOption = function (userArg) {
-  return userArg.startsWith("-");
+const optionValue = { l: "line", w: "word", c: "byte", default: "default" };
+
+const isNotOption = function(userArg) {
+  return !userArg.startsWith("-");
 };
 
-const isNotOption = function (userArg) {
-  return !isOption(userArg);
+const extractUniqueOptions = function(options) {
+  options = options
+    .join("")
+    .split("")
+    .filter(x => x != "-");
+  return extractSet(options);
 };
 
-const isValidOption = function (option) {
-  return ValidOptions.includes(option);
+const isOptionDefault = function(options) {
+  return options[0] == "default" || defaultOptions.includes(options.join(""));
 };
 
-const findFirstIndexOf = function (list, predicate) {
-let allOccurences = list.filter(predicate);
-  return list.indexOf(allOccurences[0]);
-};
-
-const intersection = function (list1, list2) {
-  return list2.filter(x => list1.includes(x));
-};
-
-const isContainsDefaultOption = function (options) {
-  return intersection(defaultOptions, options).length != 0;
-};
-
-const extractSet = function (list) {
-  let result = [];
-  list.forEach(x => {if(!result.includes(x)){ result.push(x) }});
-  return result;
-};
-
-const isSame = function(list1,list2) {
-  return list1.every(x => list2.includes(x));
-}
-
-const classifyArgs = function (userArgs) {
+const classifyArgs = function(userArgs) {
   let options = ["default"];
   let filesStartsFrom = findFirstIndexOf(userArgs, isNotOption);
   let optionsUpto = filesStartsFrom;
   let files = userArgs.slice(filesStartsFrom);
-  if(optionsUpto > 0){
+  if (optionsUpto > 0) {
     options = userArgs.slice(0, optionsUpto);
-  };
-  if(isContainsDefaultOption(options)) {
-    options = ["default"];
-    return {options, files};
-  };
-  options = options.join("").split("").filter(x => x != '-');
-  options = (extractSet(options));
-  if(isSame(ValidOptions, options)) {
-    return {options:["default"],files};
-  };
-  return { options, files };
+    options = extractUniqueOptions(options);
+  }
+  if (isOptionDefault(options)) {
+    return { options: ["default"], files, error: "" };
+  }
+  return { options, files, error: "" };
 };
 
-const parse = function (userArgs) {
-  let { options, files } = classifyArgs(userArgs);
-  options = options.map(function(option){
-    if (isValidOption(option)) {
-      return optionValue[option];
-    };
-    return option;
+const isInvalidOption = function(option) {
+  return !validOptions.includes(option);
+};
+
+const invalidOptionMsg = function(option) {
+  return ["wc: illegal option -- ", option].join("");
+};
+
+const usageMsg = "usage: wc [-clmw] [file ...]";
+
+const parse = function(userArgs) {
+  let { options, files, error } = classifyArgs(userArgs);
+  options = options.map(function(option) {
+    if (isInvalidOption(option)) {
+      error = [invalidOptionMsg(option), usageMsg].join("\n");
+      return option;
+    }
+    return optionValue[option];
   });
-  return { options, files };
+  return { options, files, error };
 };
 
 module.exports = { parse };
