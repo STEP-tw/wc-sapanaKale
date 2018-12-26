@@ -1,2 +1,5 @@
 * change lib name lwcCounter.js
 * change function name countLinesWordsBytes
+* needs to refactor parse.js and lwcCounter.js
+* needs to extract util
+* improve formatOutput

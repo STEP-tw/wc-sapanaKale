@@ -16,10 +16,10 @@ const countBytes = function (content) {
 
 const counter = { line: countLines, word: countWords, byte: countBytes };
 
-const countLinesWordsBytes = function ({ option, files }, fs) {
+const countLinesWordsBytes = function ({ options, files }, fs) {
   return files.map(function (filename) {
     let content = fs.readFileSync(filename).toString();
-    if (option == "default") {
+    if (options[0] == "default") {
       return [
         countLines(content),
         countWords(content),
@@ -27,8 +27,22 @@ const countLinesWordsBytes = function ({ option, files }, fs) {
         filename
       ];
     };
-    return [counter[option](content), filename];
+    if (options.length > 1){
+    options = sortOptions(options);
+    }
+    let counts = options.map(function(option) {
+      return counter[option](content);
+    });
+    counts.push(filename);
+    return counts;
   });
+};
+
+const sortOptions = function (list) {
+  if(list[0] == "byte" || list[1] == "line") {
+    return [list[1],list[0]];
+  };
+  return list;
 };
 
 module.exports = { countLinesWordsBytes };
