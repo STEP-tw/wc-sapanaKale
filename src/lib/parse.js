@@ -1,13 +1,12 @@
 const classifyArgs = function(userArgs) {
   const firstArg = userArgs[0];
-  const secondArg = userArgs[1];
   let option = "default";
-  let filename = firstArg;
+  let files = userArgs.slice(0);
   if (firstArg.startsWith("-")) {
     option = firstArg[1];
-    filename = secondArg;
+    files = userArgs.slice(1);
   }
-  return { option, filename };
+  return { option, files };
 };
 
 const ValidOptions = ["l", "w", "c"];
@@ -19,11 +18,11 @@ const isValidOption = function(option) {
 };
 
 const parse = function(userArgs) {
-  let { option, filename } = classifyArgs(userArgs);
+  let { option, files } = classifyArgs(userArgs);
   if (isValidOption(option)) {
     option = options[option];
   }
-  return { option, filename };
+  return { option, files };
 };
 
 module.exports = { parse };
