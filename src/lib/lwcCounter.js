@@ -1,5 +1,5 @@
 const countLines = function(content) {
-  return content.split('\n').length - 1;
+  return content.split("\n").length - 1;
 };
 
 const countWords = function(content) {
@@ -14,19 +14,19 @@ const countBytes = function(content) {
   return content.split("").length;
 };
 
-const countLinesWordsBytes = function(filename, fs) {
+const counter = { line: countLines, word: countWords, byte: countBytes };
+
+const countLinesWordsBytes = function({ option, filename }, fs) {
   let content = fs.readFileSync(filename).toString();
-  return {
-    lines: countLines(content),
-    words: countWords(content),
-    bytes: countBytes(content),
-    filename: filename
-  };
+  if (option == "default") {
+    return [
+      countLines(content),
+      countWords(content),
+      countBytes(content),
+      filename
+    ];
+  }
+  return [counter[option](content), filename];
 };
 
-const formatOutput = function({ lines, words, bytes, filename }) {
-  let result = ["      ", lines, "    ", words, "    ", bytes, " ", filename].join("");
-  return result;
-};
-
-module.exports = { countLinesWordsBytes, formatOutput };
+module.exports = { countLinesWordsBytes };

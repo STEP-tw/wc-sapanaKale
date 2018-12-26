@@ -30,11 +30,14 @@
   node ./wc.js -c -l -w file1 [file2]...
 */
 
-const { countLinesWordsBytes, formatOutput } = require("./src/lib/lwcCounter");
-const fs = require('fs');
+const { parse } = require("./src/lib/parse");
+const { countLinesWordsBytes } = require("./src/lib/lwcCounter");
+const { formatOutput } = require("./src/lib/formatOutput");
+const fs = require("fs");
 
 const main = function() {
-  let countDetails = countLinesWordsBytes(process.argv[2], fs);
+  let parameters = parse(process.argv.slice(2));
+  let countDetails = countLinesWordsBytes(parameters, fs);
   return formatOutput(countDetails);
 };
 
