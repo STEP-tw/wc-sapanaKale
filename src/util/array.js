@@ -3,16 +3,6 @@ const findFirstIndexOf = function(list, predicate) {
   return list.indexOf(allOccurences[0]);
 };
 
-const extractSet = function(list) {
-  let result = [];
-  list.forEach(x => {
-    if (!result.includes(x)) {
-      result.push(x);
-    }
-  });
-  return result;
-};
-
 const addLists = function (list1, list2) {
   let result = [];
   for (let index = 0; index < list1.length; index++) {
@@ -21,4 +11,4 @@ const addLists = function (list1, list2) {
   return result;
 };
 
-module.exports = { findFirstIndexOf, extractSet, addLists };
+module.exports = { findFirstIndexOf, addLists };

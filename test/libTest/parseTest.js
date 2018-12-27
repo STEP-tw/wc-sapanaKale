@@ -5,7 +5,7 @@ describe("parse", function() {
   it("should return option as default when option is not specified", function() {
     let actual = parse(["alphabates.txt"]);
     let expected = {
-      options: ["default"],
+      options: ["line","word","byte"],
       files: ["alphabates.txt"],
       error: ""
     };
@@ -21,7 +21,7 @@ describe("parse", function() {
   it("shold return list of files when multiple files are given", function() {
     let actual = parse(["file1", "file2"]);
     let expected = {
-      options: ["default"],
+      options: ["line","word","byte"],
       files: ["file1", "file2"],
       error: ""
     };
@@ -31,14 +31,14 @@ describe("parse", function() {
   it("should return option as default when specified option contains lwc", function() {
     let actual = parse(["-lwc", "file1", "file2"]);
     let expected = {
-      options: ["default"],
+      options: ["line","word","byte"],
       files: ["file1", "file2"],
       error: ""
     };
     assert.deepEqual(actual, expected);
 
     actual = parse(["-lc", "-lw", "file1", "file2"]);
-    expected = { options: ["default"], files: ["file1", "file2"], error: "" };
+    expected = { options: ["line","word","byte"], files: ["file1", "file2"], error: "" };
     assert.deepEqual(actual, expected);
   });
 
@@ -53,7 +53,7 @@ describe("parse", function() {
     let error = "wc: illegal option -- g\n";
     error += "usage: wc [-clmw] [file ...]";
     let expected = {
-      options: ["g", "l", "w"],
+      options: ["line", "word"],
       files: ["file1"],
       error: error
     };
@@ -63,7 +63,7 @@ describe("parse", function() {
     error = "wc: illegal option -- t\n";
     error += "usage: wc [-clmw] [file ...]";
     expected = {
-      options: ["l", "t", "w", "p"],
+      options: ["line", "word"],
       files: ["file1"],
       error: error
     };

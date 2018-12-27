@@ -1,51 +1,30 @@
-const { findFirstIndexOf, extractSet } = require("../util/array");
+const { findFirstIndexOf } = require("../util/array");
 
-const validOptions = ["default", "l", "w", "c"];
+const allValidOptions = ["l", "w", "c"];
 
-const defaultOptions = ["lwc", "lcw", "wlc", "wcl", "cwl", "clw"];
-
-const optionValue = { l: "line", w: "word", c: "byte", default: "default" };
+const optionValue = { l: "line", w: "word", c: "byte" };
 
 const isNotOption = function (userArg) {
   return !userArg.startsWith("-");
 };
 
-const extractUniqueOptions = function (options) {
-  options = options
+const extractOptions = function (options) {
+  return options
     .join("")
     .split("")
     .filter(x => x != "-");
-  return extractSet(options);
 };
 
-const isOptionDefault = function (options) {
-  return options[0] == "default" || defaultOptions.includes(options.join(""));
+const getUniqueValidOptions = function (options) {
+  return allValidOptions.filter(x => options.includes(x));
 };
 
-const classifyArgs = function (userArgs) {
-  let options = ["default"];
-  let filesStartsFrom = findFirstIndexOf(userArgs, isNotOption);
-  let optionsUpto = filesStartsFrom;
-  let files = userArgs.slice(filesStartsFrom);
-  if (optionsUpto > 0) {
-    options = userArgs.slice(0, optionsUpto);
-    options = extractUniqueOptions(options);
-  }
-  if (isOptionDefault(options)) {
-    return { options: ["default"], files, error: "" };
-  }
-  return { options, files, error: "" };
-};
-
-const sortOptions = function(options) {
-  if (options[0] == "byte" || options[1] == "line") {
-    return [options[1], options[0]];
-  }
-  return options;
+const getClassifiedArgs = function (options, files, error) {
+  return { options, files, error };
 };
 
 const isInvalidOption = function (option) {
-  return !validOptions.includes(option);
+  return !allValidOptions.includes(option);
 };
 
 const invalidOptionMsg = function (option) {
@@ -54,18 +33,25 @@ const invalidOptionMsg = function (option) {
 
 const usageMsg = "usage: wc [-clmw] [file ...]";
 
-const parse = function (userArgs) {
-  let { options, files, error } = classifyArgs(userArgs);
-  let pos = findFirstIndexOf(options, isInvalidOption);
-  if (pos != -1) {
-    error = [invalidOptionMsg(options[pos]), usageMsg].join("\n");
-  } else {
-    options = options.map(option => optionValue[option]);
-    if(options.length > 1){
-    options = sortOptions(options);
-    };
+const validateOptions = function (options) {
+  let invalidOptionPos = findFirstIndexOf(options, isInvalidOption);
+  if (invalidOptionPos != -1) {
+    return [invalidOptionMsg(options[invalidOptionPos]), usageMsg].join("\n");
   };
-  return { options, files, error };
+  return '';
+};
+
+const parse = function (userArgs) {
+  let options = ["l","w","c"];
+  let filesStartsFrom = findFirstIndexOf(userArgs, isNotOption);
+  let files = userArgs.slice(filesStartsFrom);
+  if (filesStartsFrom > 0) {
+    options = extractOptions(userArgs.slice(0, filesStartsFrom));
+  };
+  let error = validateOptions(options)
+  options = getUniqueValidOptions(options);
+  options = options.map(option => optionValue[option]);
+  return getClassifiedArgs(options, files, error);
 };
 
 module.exports = { parse };
