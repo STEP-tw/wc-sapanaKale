@@ -1,5 +1,6 @@
 const { addLists } = require('../util/array');
 const { alignRight } = require('../util/string');
+const { fileNotFoundMsg } = require('./checkErrors');
 
 const justifyCountsAndFilename = function (counts, filename) {
   let justifiedCounts = counts.map(count => alignRight(8, count)).join("");
@@ -16,10 +17,6 @@ const getTotal = function (filesCounts) {
   let countsList = filterCountsList(filesCounts);
   let total = countsList.reduce(addLists);
   return justifyCountsAndFilename(total, "total");
-};
-
-const fileNotFoundMsg = function (filename) {
-  return ["wc: ", filename, ": open: No such file or directory"].join("");
 };
 
 const getFormattedFileCountData = function ({ filename, isExists, counts }) {

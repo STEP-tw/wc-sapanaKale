@@ -1,6 +1,5 @@
 const { findFirstIndexOf } = require("../util/array");
-
-const allValidOptions = ["l", "w", "c"];
+const { validateOptions } = require("./checkErrors");
 
 const optionValue = { l: "line", w: "word", c: "byte" };
 
@@ -16,33 +15,15 @@ const extractOptions = function (options) {
 };
 
 const getUniqueValidOptions = function (options) {
-  return allValidOptions.filter(x => options.includes(x));
+  return ["l", "w", "c"].filter(x => options.includes(x));
 };
 
 const getClassifiedArgs = function (options, files, error) {
   return { options, files, error };
 };
 
-const isInvalidOption = function (option) {
-  return !allValidOptions.includes(option);
-};
-
-const invalidOptionMsg = function (option) {
-  return ["wc: illegal option -- ", option].join("");
-};
-
-const usageMsg = "usage: wc [-clmw] [file ...]";
-
-const validateOptions = function (options) {
-  let invalidOptionPos = findFirstIndexOf(options, isInvalidOption);
-  if (invalidOptionPos != -1) {
-    return [invalidOptionMsg(options[invalidOptionPos]), usageMsg].join("\n");
-  };
-  return '';
-};
-
 const parse = function (userArgs) {
-  let options = ["l","w","c"];
+  let options = ["l", "w", "c"];
   let filesStartsFrom = findFirstIndexOf(userArgs, isNotOption);
   let files = userArgs.slice(filesStartsFrom);
   if (filesStartsFrom > 0) {
