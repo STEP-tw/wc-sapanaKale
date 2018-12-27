@@ -1,8 +1,8 @@
-const countLines = function (content) {
+const countLines = function(content) {
   return content.split("\n").length - 1;
 };
 
-const countWords = function (content) {
+const countWords = function(content) {
   return content
     .split("\n")
     .join(" ")
@@ -10,39 +10,40 @@ const countWords = function (content) {
     .filter(x => x != "").length;
 };
 
-const countBytes = function (content) {
+const countBytes = function(content) {
   return content.split("").length;
+};
+
+const countAll = function (content) {
+  return [
+    countLines(content),
+    countWords(content),
+    countBytes(content)
+  ];
+};
+
+const getCounts = function (options, content) {
+  if (options[0] == "default") {
+    return countAll(content);
+  };
+  return options.map(option => counter[option](content));
 };
 
 const counter = { line: countLines, word: countWords, byte: countBytes };
 
-const countLinesWordsBytes = function ({ options, files }, fs) {
-  return files.map(function (filename) {
-    let content = fs.readFileSync(filename).toString();
-    if (options[0] == "default") {
-      return [
-        countLines(content),
-        countWords(content),
-        countBytes(content),
-        filename
-      ];
+const generateCounts = function({ options, files }, fs) {
+  return files.map(function(filename) {
+    let countDetails = {filename: filename, isExists: true};
+    if(!fs.existsSync(filename)){
+      countDetails.isExists = false;
+      return countDetails;
     };
-    if (options.length > 1){
-    options = sortOptions(options);
-    }
-    let counts = options.map(function(option) {
-      return counter[option](content);
-    });
-    counts.push(filename);
-    return counts;
+    let content = fs.readFileSync(filename).toString();
+    countDetails.counts = getCounts(options, content);
+    return countDetails;
   });
 };
 
-const sortOptions = function (list) {
-  if(list[0] == "byte" || list[1] == "line") {
-    return [list[1],list[0]];
-  };
-  return list;
-};
 
-module.exports = { countLinesWordsBytes };
+
+module.exports = { generateCounts };

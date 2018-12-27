@@ -6,11 +6,11 @@ const defaultOptions = ["lwc", "lcw", "wlc", "wcl", "cwl", "clw"];
 
 const optionValue = { l: "line", w: "word", c: "byte", default: "default" };
 
-const isNotOption = function(userArg) {
+const isNotOption = function (userArg) {
   return !userArg.startsWith("-");
 };
 
-const extractUniqueOptions = function(options) {
+const extractUniqueOptions = function (options) {
   options = options
     .join("")
     .split("")
@@ -18,11 +18,11 @@ const extractUniqueOptions = function(options) {
   return extractSet(options);
 };
 
-const isOptionDefault = function(options) {
+const isOptionDefault = function (options) {
   return options[0] == "default" || defaultOptions.includes(options.join(""));
 };
 
-const classifyArgs = function(userArgs) {
+const classifyArgs = function (userArgs) {
   let options = ["default"];
   let filesStartsFrom = findFirstIndexOf(userArgs, isNotOption);
   let optionsUpto = filesStartsFrom;
@@ -37,25 +37,34 @@ const classifyArgs = function(userArgs) {
   return { options, files, error: "" };
 };
 
-const isInvalidOption = function(option) {
+const sortOptions = function(options) {
+  if (options[0] == "byte" || options[1] == "line") {
+    return [options[1], options[0]];
+  }
+  return options;
+};
+
+const isInvalidOption = function (option) {
   return !validOptions.includes(option);
 };
 
-const invalidOptionMsg = function(option) {
+const invalidOptionMsg = function (option) {
   return ["wc: illegal option -- ", option].join("");
 };
 
 const usageMsg = "usage: wc [-clmw] [file ...]";
 
-const parse = function(userArgs) {
+const parse = function (userArgs) {
   let { options, files, error } = classifyArgs(userArgs);
-  options = options.map(function(option) {
-    if (isInvalidOption(option)) {
-      error = [invalidOptionMsg(option), usageMsg].join("\n");
-      return option;
-    }
-    return optionValue[option];
-  });
+  let pos = findFirstIndexOf(options, isInvalidOption);
+  if (pos != -1) {
+    error = [invalidOptionMsg(options[pos]), usageMsg].join("\n");
+  } else {
+    options = options.map(option => optionValue[option]);
+    if(options.length > 1){
+    options = sortOptions(options);
+    };
+  };
   return { options, files, error };
 };
 

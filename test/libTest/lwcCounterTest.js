@@ -1,53 +1,120 @@
 const assert = require("assert");
-const { countLinesWordsBytes } = require("../../src/lib/lwcCounter");
+const { generateCounts } = require("../../src/lib/lwcCounter");
 
-const fileContents = { "alphabates.txt": "a\nb\nc\nd",
-"numbers.txt": "1\n2\n3\n4\n5" };
+const fileContents = {
+  "alphabates.txt": "a\nb\nc\nd",
+  "numbers.txt": "1\n2\n3\n4\n5"
+};
 
-const fs = { readFileSync: x => fileContents[x] };
+const fs = {
+  readFileSync: x => fileContents[x],
+  existsSync: x => {
+    if (fileContents[x] == undefined) {
+      return false;
+    };
+    return true;
+  }
+};
 
-describe("countLines-Words-Bytes", function() {
-  it("should return default list containing the line, word, byte count and filename", function() {
-    let actual = countLinesWordsBytes(
+describe("generateCounts", function () {
+  it("should return object contains counts as allcounts when option is default", function () {
+    let actual = generateCounts(
       { options: ["default"], files: ["alphabates.txt"] },
       fs
     );
-    let expected = [[3, 4, 7, "alphabates.txt"]];
+    let expected = [
+      {
+        filename: "alphabates.txt",
+        isExists: true,
+        counts: [3, 4, 7]
+      }
+    ];
     assert.deepEqual(actual, expected);
   });
 
-  it("should return list contains specified option count and filename", function() {
-    let actual = countLinesWordsBytes(
+  it("should return object contains count of specified option", function () {
+    let actual = generateCounts(
       { options: ["line"], files: ["alphabates.txt"] },
       fs
     );
-    let expected = [[3, "alphabates.txt"]];
+    let expected = [
+      {
+        filename: "alphabates.txt",
+        isExists: true,
+        counts: [3]
+      }
+    ];
     assert.deepEqual(actual, expected);
   });
 
-  it("should return array of default list for multiple files", function() {
-    let actual = countLinesWordsBytes(
-    { options: ["default"], files: ["alphabates.txt", "numbers.txt"] },
-    fs
+  it("should return all counts for multiple files when option is default", function () {
+    let actual = generateCounts(
+      { options: ["default"], files: ["alphabates.txt", "numbers.txt"] },
+      fs
     );
-    let expected = [[3,4,7,"alphabates.txt"],
-    [4,5,9,"numbers.txt"]];
+    let expected = [
+      {
+        filename: "alphabates.txt",
+        isExists: true,
+        counts: [3, 4, 7]
+      },
+      {
+        filename: "numbers.txt",
+        isExists: true,
+        counts: [4, 5, 9]
+      }
+    ];
     assert.deepEqual(actual, expected);
   });
-  
-  it("should return output in default sequence when multiple options given combine", function(){
-    let actual = countLinesWordsBytes(
+
+  it("should return counts of specified option when multiple options given combine", function () {
+    let actual = generateCounts(
       { options: ["line", "word"], files: ["alphabates.txt"] },
       fs
     );
-    let expected = [[3,4,"alphabates.txt"]];
+    let expected = [
+      {
+        filename: "alphabates.txt",
+        isExists: true,
+        counts: [3, 4]
+      }
+    ];
     assert.deepEqual(actual, expected);
 
-    actual = countLinesWordsBytes(
-    { options: ["word", "line"], files: ["alphabates.txt", "numbers.txt"] },
-    fs
+    actual = generateCounts(
+      { options: ["line", "word"], files: ["alphabates.txt", "numbers.txt"] },
+      fs
     );
-    expected = [[3,4,"alphabates.txt"],[4,5,"numbers.txt"]];
+    expected = [
+      {
+        filename: "alphabates.txt",
+        isExists: true,
+        counts: [3, 4]
+      },
+      {
+        filename: "numbers.txt",
+        isExists: true,
+        counts: [4, 5]
+      }
+    ];
     assert.deepEqual(actual, expected);
-  }); 
-});
+  });
+
+  it("should return isExists as false when given file not exists", function () {
+    let actual = generateCounts(
+      { options: ["default"], files: ["alphabates", "numbers.txt"] },
+      fs
+    );
+    let expected = [
+      {
+        filename: "alphabates",
+        isExists: false
+      },
+      {
+        filename: "numbers.txt",
+        isExists: true,
+        counts: [4, 5, 9]
+      }
+    ];
+    assert.deepEqual(actual, expected);
+  }); });

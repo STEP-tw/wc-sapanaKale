@@ -53,20 +53,26 @@ describe("parse", function() {
     let error = "wc: illegal option -- g\n";
     error += "usage: wc [-clmw] [file ...]";
     let expected = {
-      options: ["g", "line", "word"],
+      options: ["g", "l", "w"],
       files: ["file1"],
       error: error
     };
     assert.deepEqual(actual, expected);
 
-    actual = parse(["-lcw", "-lt", "file1"]);
+    actual = parse(["-ltw", "-lp", "file1"]);
     error = "wc: illegal option -- t\n";
     error += "usage: wc [-clmw] [file ...]";
     expected = {
-      options: ["line", "byte", "word", "t"],
+      options: ["l", "t", "w", "p"],
       files: ["file1"],
       error: error
     };
+    assert.deepEqual(actual, expected);
+  });
+
+  it("should return options sequence lwc when given options are not", function(){
+    let actual = parse(["-wl", "file1"]);
+    let expected = { options: ["line", "word"], files: ["file1"], error: "" };
     assert.deepEqual(actual, expected);
   });
 });

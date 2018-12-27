@@ -3,3 +3,4 @@
 * needs to refactor parse.js and lwcCounter.js
 * needs to extract util
 * improve formatOutput
+* declare constant separately.

@@ -31,7 +31,7 @@
 */
 
 const { parse } = require("./src/lib/parse");
-const { countLinesWordsBytes } = require("./src/lib/lwcCounter");
+const { generateCounts } = require("./src/lib/lwcCounter");
 const { formatOutput } = require("./src/lib/formatOutput");
 const fs = require("fs");
 
@@ -40,7 +40,7 @@ const main = function() {
   if(parameters.error) {
     return parameters.error;
   };
-  let countDetails = countLinesWordsBytes(parameters, fs);
+  let countDetails = generateCounts(parameters, fs);
   return formatOutput(countDetails);
 };
 
