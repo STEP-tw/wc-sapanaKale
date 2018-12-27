@@ -17,9 +17,9 @@ const fs = {
 };
 
 describe("generateCounts", function () {
-  it("should return object contains counts as allcounts when option is default", function () {
+  it("should return all counts for single file when all options are specified", function () {
     let actual = generateCounts(
-      { options: ["default"], files: ["alphabates.txt"] },
+      { options: ["line", "word", "byte"], files: ["alphabates.txt"] },
       fs
     );
     let expected = [
@@ -47,9 +47,9 @@ describe("generateCounts", function () {
     assert.deepEqual(actual, expected);
   });
 
-  it("should return all counts for multiple files when option is default", function () {
+  it("should return all counts for multiple files when all options are specified", function () {
     let actual = generateCounts(
-      { options: ["default"], files: ["alphabates.txt", "numbers.txt"] },
+      { options: ["line", "word", "byte"], files: ["alphabates.txt", "numbers.txt"] },
       fs
     );
     let expected = [
@@ -102,7 +102,7 @@ describe("generateCounts", function () {
 
   it("should return isExists as false when given file not exists", function () {
     let actual = generateCounts(
-      { options: ["default"], files: ["alphabates", "numbers.txt"] },
+      { options: ["line", "word","byte"], files: ["alphabates", "numbers.txt"] },
       fs
     );
     let expected = [
