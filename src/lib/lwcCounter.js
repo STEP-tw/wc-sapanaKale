@@ -13,7 +13,7 @@ const countWords = function (content) {
 };
 
 const countBytes = function (content) {
-  return content.split(EMPTY_STRING).length;
+  return content.length;
 };
 
 const getCounts = function (options, content) {
