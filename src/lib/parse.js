@@ -1,17 +1,18 @@
 const { findFirstIndexOf } = require("../util/array");
 const { validateOptions } = require("./checkErrors");
+const { EMPTY_STRING, HYPHEN } = require('../util/constants');
 
 const optionValue = { l: "line", w: "word", c: "byte" };
 
 const isNotOption = function (userArg) {
-  return !userArg.startsWith("-");
+  return !userArg.startsWith(HYPHEN);
 };
 
 const extractOptions = function (options) {
   return options
-    .join("")
-    .split("")
-    .filter(x => x != "-");
+    .join(EMPTY_STRING)
+    .split(EMPTY_STRING)
+    .filter(x => x != HYPHEN);
 };
 
 const getUniqueValidOptions = function (options) {
@@ -24,12 +25,12 @@ const getClassifiedArgs = function (options, files, error) {
 
 const parse = function (userArgs) {
   let options = ["l", "w", "c"];
-  let filesStartsFrom = findFirstIndexOf(userArgs, isNotOption);
-  let files = userArgs.slice(filesStartsFrom);
+  const filesStartsFrom = findFirstIndexOf(userArgs, isNotOption);
+  const files = userArgs.slice(filesStartsFrom);
   if (filesStartsFrom > 0) {
     options = extractOptions(userArgs.slice(0, filesStartsFrom));
   };
-  let error = validateOptions(options)
+  const error = validateOptions(options)
   options = getUniqueValidOptions(options);
   options = options.map(option => optionValue[option]);
   return getClassifiedArgs(options, files, error);

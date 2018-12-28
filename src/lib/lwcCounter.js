@@ -1,17 +1,19 @@
+const { SPACE, NEWLINE, EMPTY_STRING } = require('../util/constants');
+
 const countLines = function (content) {
-  return content.split("\n").length - 1;
+  return content.split(NEWLINE).length - 1;
 };
 
 const countWords = function (content) {
   return content
-    .split("\n")
-    .join(" ")
-    .split(" ")
-    .filter(x => x != "").length;
+    .split(NEWLINE)
+    .join(SPACE)
+    .split(SPACE)
+    .filter(x => x != EMPTY_STRING).length;
 };
 
 const countBytes = function (content) {
-  return content.split("").length;
+  return content.split(EMPTY_STRING).length;
 };
 
 const getCounts = function (options, content) {
@@ -24,8 +26,8 @@ const getCountDetails = function (fs, options, filename) {
   if (!fs.existsSync(filename)) {
     return { filename: filename, isExists: false };
   };
-  let content = fs.readFileSync(filename).toString();
-  let counts = getCounts(options, content);
+  const content = fs.readFileSync(filename).toString();
+  const counts = getCounts(options, content);
   return { filename: filename, isExists: true, counts: counts };
 };
 

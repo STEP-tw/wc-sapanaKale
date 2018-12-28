@@ -1,10 +1,11 @@
 const { addLists } = require('../util/array');
 const { alignRight } = require('../util/string');
 const { fileNotFoundMsg } = require('./checkErrors');
+const { SPACE, EMPTY_STRING, NEWLINE } = require('../util/constants');
 
 const justifyCountsAndFilename = function (counts, filename) {
-  let justifiedCounts = counts.map(count => alignRight(8, count)).join("");
-  return [justifiedCounts, filename].join(" ");
+  const justifiedCounts = counts.map(count => alignRight(8, count)).join(EMPTY_STRING);
+  return [justifiedCounts, filename].join(SPACE);
 };
 
 const filterCountsList = function (filesCounts) {
@@ -14,8 +15,8 @@ const filterCountsList = function (filesCounts) {
 };
 
 const getTotal = function (filesCounts) {
-  let countsList = filterCountsList(filesCounts);
-  let total = countsList.reduce(addLists);
+  const countsList = filterCountsList(filesCounts);
+  const total = countsList.reduce(addLists);
   return justifyCountsAndFilename(total, "total");
 };
 
@@ -27,12 +28,12 @@ const getFormattedFileCountData = function ({ filename, isExists, counts }) {
 };
 
 const formatOutput = function (filesCounts) {
-  let output = filesCounts.map(getFormattedFileCountData);
+  const output = filesCounts.map(getFormattedFileCountData);
   if (filesCounts.length > 1) {
-    let total = getTotal(filesCounts);
+    const total = getTotal(filesCounts);
     output.push(total);
   };
-  return output.join("\n");
+  return output.join(NEWLINE);
 };
 
 module.exports = { formatOutput };

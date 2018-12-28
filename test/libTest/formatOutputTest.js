@@ -1,5 +1,6 @@
 const assert = require("assert");
 const { formatOutput } = require("../../src/lib/formatOutput");
+const { NEWLINE } = require('../../src/util/constants');
 
 describe("formatOutput", function() {
   it("should return output content in string for single file", function() {
@@ -40,7 +41,7 @@ describe("formatOutput", function() {
       "wc: alphabates: open: No such file or directory",
       "       4       5       9 numbers.txt",
       "       4       5       9 total"
-    ].join("\n");
+    ].join(NEWLINE);
     assert.deepEqual(actual, expected);
   });
 
@@ -61,7 +62,7 @@ describe("formatOutput", function() {
       "       3       4       7 alphabates.txt",
       "       4       5       9 numbers.txt",
       "       7       9      16 total"
-    ].join("\n");
+    ].join(NEWLINE);
     assert.deepEqual(actual, expected);
   });
 });
