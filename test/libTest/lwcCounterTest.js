@@ -11,13 +11,13 @@ const fs = {
   existsSync: x => {
     if (fileContents[x] == undefined) {
       return false;
-    };
+    }
     return true;
   }
 };
 
-describe("generateCounts", function () {
-  it("should return all counts for single file when all options are specified", function () {
+describe("generateCounts", function() {
+  it("should return all counts for single file when all options are specified", function() {
     let actual = generateCounts(
       { options: ["line", "word", "byte"], files: ["alphabates.txt"] },
       fs
@@ -32,7 +32,7 @@ describe("generateCounts", function () {
     assert.deepEqual(actual, expected);
   });
 
-  it("should return object contains count of specified option", function () {
+  it("should return object contains count of specified option", function() {
     let actual = generateCounts(
       { options: ["line"], files: ["alphabates.txt"] },
       fs
@@ -47,9 +47,12 @@ describe("generateCounts", function () {
     assert.deepEqual(actual, expected);
   });
 
-  it("should return all counts for multiple files when all options are specified", function () {
+  it("should return all counts for multiple files when all options are specified", function() {
     let actual = generateCounts(
-      { options: ["line", "word", "byte"], files: ["alphabates.txt", "numbers.txt"] },
+      {
+        options: ["line", "word", "byte"],
+        files: ["alphabates.txt", "numbers.txt"]
+      },
       fs
     );
     let expected = [
@@ -67,7 +70,7 @@ describe("generateCounts", function () {
     assert.deepEqual(actual, expected);
   });
 
-  it("should return counts of specified option when multiple options given combine", function () {
+  it("should return counts of specified option when multiple options given combine", function() {
     let actual = generateCounts(
       { options: ["line", "word"], files: ["alphabates.txt"] },
       fs
@@ -100,9 +103,12 @@ describe("generateCounts", function () {
     assert.deepEqual(actual, expected);
   });
 
-  it("should return isExists as false when given file not exists", function () {
+  it("should return isExists as false when given file not exists", function() {
     let actual = generateCounts(
-      { options: ["line", "word","byte"], files: ["alphabates", "numbers.txt"] },
+      {
+        options: ["line", "word", "byte"],
+        files: ["alphabates", "numbers.txt"]
+      },
       fs
     );
     let expected = [
@@ -117,4 +123,5 @@ describe("generateCounts", function () {
       }
     ];
     assert.deepEqual(actual, expected);
-  }); });
+  });
+});

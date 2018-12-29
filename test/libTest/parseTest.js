@@ -5,7 +5,7 @@ describe("parse", function() {
   it("should return option as default when option is not specified", function() {
     let actual = parse(["alphabates.txt"]);
     let expected = {
-      options: ["line","word","byte"],
+      options: ["line", "word", "byte"],
       files: ["alphabates.txt"],
       error: ""
     };
@@ -21,7 +21,7 @@ describe("parse", function() {
   it("shold return list of files when multiple files are given", function() {
     let actual = parse(["file1", "file2"]);
     let expected = {
-      options: ["line","word","byte"],
+      options: ["line", "word", "byte"],
       files: ["file1", "file2"],
       error: ""
     };
@@ -31,14 +31,18 @@ describe("parse", function() {
   it("should return option as default when specified option contains lwc", function() {
     let actual = parse(["-lwc", "file1", "file2"]);
     let expected = {
-      options: ["line","word","byte"],
+      options: ["line", "word", "byte"],
       files: ["file1", "file2"],
       error: ""
     };
     assert.deepEqual(actual, expected);
 
     actual = parse(["-lc", "-lw", "file1", "file2"]);
-    expected = { options: ["line","word","byte"], files: ["file1", "file2"], error: "" };
+    expected = {
+      options: ["line", "word", "byte"],
+      files: ["file1", "file2"],
+      error: ""
+    };
     assert.deepEqual(actual, expected);
   });
 
@@ -70,7 +74,7 @@ describe("parse", function() {
     assert.deepEqual(actual, expected);
   });
 
-  it("should return options sequence lwc when given options are not", function(){
+  it("should return options sequence lwc when given options are not", function() {
     let actual = parse(["-wl", "file1"]);
     let expected = { options: ["line", "word"], files: ["file1"], error: "" };
     assert.deepEqual(actual, expected);

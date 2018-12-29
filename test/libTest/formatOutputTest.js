@@ -1,6 +1,6 @@
 const assert = require("assert");
 const { formatOutput } = require("../../src/lib/formatOutput");
-const { NEWLINE } = require('../../src/util/constants');
+const { NEWLINE } = require("../../src/util/constants");
 
 describe("formatOutput", function() {
   it("should return output content in string for single file", function() {
@@ -8,7 +8,7 @@ describe("formatOutput", function() {
       {
         filename: "alphabates.txt",
         isExists: true,
-        counts:[3, 4, 7]
+        counts: [3, 4, 7]
       }
     ]);
     let expected = "       3       4       7 alphabates.txt";
@@ -18,7 +18,7 @@ describe("formatOutput", function() {
       {
         filename: "alphabates.txt",
         isExists: true,
-        counts:[3]
+        counts: [3]
       }
     ]);
     expected = "       3 alphabates.txt";

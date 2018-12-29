@@ -37,9 +37,9 @@ const fs = require("fs");
 
 const main = function() {
   let parameters = parse(process.argv.slice(2));
-  if(parameters.error) {
+  if (parameters.error) {
     return parameters.error;
-  };
+  }
   let countDetails = generateCounts(parameters, fs);
   return formatOutput(countDetails);
 };
