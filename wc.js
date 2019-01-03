@@ -32,16 +32,14 @@
 
 const { parse } = require("./src/lib/parse");
 const { generateCounts } = require("./src/lib/lwcCounter");
-const { formatOutput } = require("./src/lib/formatOutput");
 const fs = require("fs");
 
 const main = function() {
   let parameters = parse(process.argv.slice(2));
   if (parameters.error) {
-    return parameters.error;
+    return console.error(parameters.error);
   }
-  let countDetails = generateCounts(parameters, fs);
-  return formatOutput(countDetails);
+  generateCounts(parameters, fs, console.log);
 };
 
-console.log(main());
+main();
